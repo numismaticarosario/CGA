@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CGA — Pair Trading Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Header ── -->
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 17l4-8 4 4 4-6 4 10H3z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="logo-name">CGA</div>
+          <div class="logo-tagline">Pair Trading Monitor</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="user-info">
+          <img id="user-avatar" class="user-avatar" src="" alt="avatar" style="display:none" />
+          <span id="user-name" class="user-name">—</span>
+        </div>
+        <button class="btn-refresh" id="btn-refresh" onclick="fetchDashboard()">↻ Refresh</button>
+        <a href="/auth/logout" class="btn-logout">Sign out</a>
+      </div>
+    </header>
+
+    <!-- ── Main content ── -->
+    <main>
+
+      <div class="page-header">
+        <div class="page-title">// <span>Live Indicators</span> · ADA / SOL Pair Trading</div>
+        <div class="last-updated" id="last-updated">
+          <div class="dot"></div>
+          <span id="last-updated-text">Loading…</span>
+        </div>
+      </div>
+
+      <!-- Error banner -->
+      <div class="error-banner" id="error-banner">
+        <span class="icon">⚠</span>
+        <span id="error-text">An error occurred.</span>
+      </div>
+
+      <!-- Environments -->
+      <div class="environments">
+
+        <!-- ADA Environment -->
+        <div class="env-block" id="ada-env">
+          <div class="env-header">
+            <div class="env-title">ADA Environment</div>
+            <div class="env-badge">ADA / SOL</div>
+          </div>
+          <div class="indicators">
+            <div class="indicator loading" id="ada-context">
+              <div class="ind-label">Context</div>
+              <div class="ind-title">Contexto</div>
+              <div class="ind-sub">ADA/SOL · 120 × 4H</div>
+              <div class="zscore-value" id="ada-context-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.0</span>
+                <span class="status-pill" id="ada-context-status">—</span>
+              </div>
+            </div>
+            <div class="indicator loading" id="ada-entry">
+              <div class="ind-label">Entry</div>
+              <div class="ind-title">Entrada</div>
+              <div class="ind-sub">ADA/SOL · 120 × 5M</div>
+              <div class="zscore-value" id="ada-entry-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.5</span>
+                <span class="status-pill" id="ada-entry-status">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SOL Environment -->
+        <div class="env-block" id="sol-env">
+          <div class="env-header">
+            <div class="env-title">SOL Environment</div>
+            <div class="env-badge">SOL / ADA</div>
+          </div>
+          <div class="indicators">
+            <div class="indicator loading" id="sol-context">
+              <div class="ind-label">Context</div>
+              <div class="ind-title">Contexto</div>
+              <div class="ind-sub">SOL/ADA · 120 × 4H</div>
+              <div class="zscore-value" id="sol-context-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.0</span>
+                <span class="status-pill" id="sol-context-status">—</span>
+              </div>
+            </div>
+            <div class="indicator loading" id="sol-entry">
+              <div class="ind-label">Entry</div>
+              <div class="ind-title">Entrada</div>
+              <div class="ind-sub">SOL/ADA · 120 × 5M</div>
+              <div class="zscore-value" id="sol-entry-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.5</span>
+                <span class="status-pill" id="sol-entry-status">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /environments -->
+
+      <!-- Status bar -->
+      <div class="status-bar">
+        <span>CGA v1.0</span>
+        <span class="sep">·</span>
+        <span>Binance Market Data</span>
+        <span class="sep">·</span>
+        <span id="cache-info">Cache: —</span>
+        <span class="sep">·</span>
+        <span>Auto-refresh every 60s</span>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
