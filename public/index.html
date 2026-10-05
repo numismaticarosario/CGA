@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CGA — Pair Trading Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 17l4-8 4 4 4-6 4 10H3z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="logo-name">CGA</div>
+          <div class="logo-tagline">Pair Trading Monitor</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="user-info">
+          <img id="user-avatar" class="user-avatar" src="" alt="avatar" style="display:none" />
+          <span id="user-name" class="user-name">—</span>
+        </div>
+        <button class="btn-refresh" id="btn-refresh" onclick="fetchDashboard()">↻ Refresh</button>
+        <a href="/auth/logout" class="btn-logout">Sign out</a>
+      </div>
+    </header>
+
+    <main>
+
+      <div class="page-header">
+        <div class="page-title">// <span>Live Indicators</span> · ADA / BTC · ADA / SOL · USD Prices</div>
+        <div class="last-updated" id="last-updated">
+          <div class="dot"></div>
+          <span id="last-updated-text">Loading…</span>
+        </div>
+      </div>
+
+      <div class="error-banner" id="error-banner">
+        <span class="icon">⚠</span>
+        <span id="error-text">An error occurred.</span>
+      </div>
+
+      <div class="environments">
+
+        <!-- ADA/BTC -->
+        <div class="env-block" id="adabtc-env">
+          <div class="env-header">
+            <div class="env-title">ADA Environment</div>
+            <div class="env-badge">ADA / BTC</div>
+          </div>
+          <div class="indicators">
+            <div class="indicator loading" id="adabtc-context">
+              <div class="ind-label">Context</div>
+              <div class="ind-title">Contexto</div>
+              <div class="ind-sub">ADA/BTC · 120 × 4H</div>
+              <div class="zscore-value" id="adabtc-context-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.0</span>
+                <span class="status-pill" id="adabtc-context-status">—</span>
+              </div>
+            </div>
+            <div class="indicator loading" id="adabtc-entry">
+              <div class="ind-label">Entry</div>
+              <div class="ind-title">Entrada</div>
+              <div class="ind-sub">ADA/BTC · 120 × 5M</div>
+              <div class="zscore-value" id="adabtc-entry-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.5</span>
+                <span class="status-pill" id="adabtc-entry-status">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BTC/ADA -->
+        <div class="env-block" id="btcada-env">
+          <div class="env-header">
+            <div class="env-title">BTC Environment</div>
+            <div class="env-badge">BTC / ADA</div>
+          </div>
+          <div class="indicators">
+            <div class="indicator loading" id="btcada-context">
+              <div class="ind-label">Context</div>
+              <div class="ind-title">Contexto</div>
+              <div class="ind-sub">BTC/ADA · 120 × 4H</div>
+              <div class="zscore-value" id="btcada-context-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.0</span>
+                <span class="status-pill" id="btcada-context-status">—</span>
+              </div>
+            </div>
+            <div class="indicator loading" id="btcada-entry">
+              <div class="ind-label">Entry</div>
+              <div class="ind-title">Entrada</div>
+              <div class="ind-sub">BTC/ADA · 120 × 5M</div>
+              <div class="zscore-value" id="btcada-entry-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.5</span>
+                <span class="status-pill" id="btcada-entry-status">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADA/SOL -->
+        <div class="env-block" id="ada-env">
+          <div class="env-header">
+            <div class="env-title">ADA Environment</div>
+            <div class="env-badge">ADA / SOL</div>
+          </div>
+          <div class="indicators">
+            <div class="indicator loading" id="ada-context">
+              <div class="ind-label">Context</div>
+              <div class="ind-title">Contexto</div>
+              <div class="ind-sub">ADA/SOL · 120 × 4H</div>
+              <div class="zscore-value" id="ada-context-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.0</span>
+                <span class="status-pill" id="ada-context-status">—</span>
+              </div>
+            </div>
+            <div class="indicator loading" id="ada-entry">
+              <div class="ind-label">Entry</div>
+              <div class="ind-title">Entrada</div>
+              <div class="ind-sub">ADA/SOL · 120 × 5M</div>
+              <div class="zscore-value" id="ada-entry-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.5</span>
+                <span class="status-pill" id="ada-entry-status">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SOL/ADA -->
+        <div class="env-block" id="sol-env">
+          <div class="env-header">
+            <div class="env-title">SOL Environment</div>
+            <div class="env-badge">SOL / ADA</div>
+          </div>
+          <div class="indicators">
+            <div class="indicator loading" id="sol-context">
+              <div class="ind-label">Context</div>
+              <div class="ind-title">Contexto</div>
+              <div class="ind-sub">SOL/ADA · 120 × 4H</div>
+              <div class="zscore-value" id="sol-context-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.0</span>
+                <span class="status-pill" id="sol-context-status">—</span>
+              </div>
+            </div>
+            <div class="indicator loading" id="sol-entry">
+              <div class="ind-label">Entry</div>
+              <div class="ind-title">Entrada</div>
+              <div class="ind-sub">SOL/ADA · 120 × 5M</div>
+              <div class="zscore-value" id="sol-entry-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≥ 1.5</span>
+                <span class="status-pill" id="sol-entry-status">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADA/USDT -->
+        <div class="env-block" id="adausdt-env">
+          <div class="env-header">
+            <div class="env-title">ADA Price USD</div>
+            <div class="env-badge">ADA / USDT</div>
+          </div>
+          <div class="indicators">
+            <div class="indicator loading" id="adausdt-4h">
+              <div class="ind-label">4H · 120 velas</div>
+              <div class="zscore-value ind-price" id="adausdt-4h-price">—</div>
+              <div class="zscore-label">Precio actual</div>
+              <div class="zscore-value" id="adausdt-4h-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≤ −1.0</span>
+                <span class="status-pill" id="adausdt-4h-status">—</span>
+              </div>
+            </div>
+            <div class="indicator loading" id="adausdt-5m">
+              <div class="ind-label">5M · 120 velas</div>
+              <div class="zscore-value ind-price" id="adausdt-5m-price">—</div>
+              <div class="zscore-label">Precio actual</div>
+              <div class="zscore-value" id="adausdt-5m-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≤ −1.5</span>
+                <span class="status-pill" id="adausdt-5m-status">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BTC/USDT -->
+        <div class="env-block" id="btcusdt-env">
+          <div class="env-header">
+            <div class="env-title">BTC Price USD</div>
+            <div class="env-badge">BTC / USDT</div>
+          </div>
+          <div class="indicators">
+            <div class="indicator loading" id="btcusdt-4h">
+              <div class="ind-label">4H · 120 velas</div>
+              <div class="zscore-value ind-price" id="btcusdt-4h-price">—</div>
+              <div class="zscore-label">Precio actual</div>
+              <div class="zscore-value" id="btcusdt-4h-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≤ −1.0</span>
+                <span class="status-pill" id="btcusdt-4h-status">—</span>
+              </div>
+            </div>
+            <div class="indicator loading" id="btcusdt-5m">
+              <div class="ind-label">5M · 120 velas</div>
+              <div class="zscore-value ind-price" id="btcusdt-5m-price">—</div>
+              <div class="zscore-label">Precio actual</div>
+              <div class="zscore-value" id="btcusdt-5m-zscore">—</div>
+              <div class="zscore-label">Z-Score</div>
+              <div class="threshold-line">
+                <span>Threshold ≤ −1.5</span>
+                <span class="status-pill" id="btcusdt-5m-status">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /environments -->
+
+      <div class="status-bar">
+        <span>CGA v1.2</span>
+        <span class="sep">·</span>
+        <span>Binance Market Data</span>
+        <span class="sep">·</span>
+        <span id="cache-info">Cache: —</span>
+        <span class="sep">·</span>
+        <span>Auto-refresh every 60s</span>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
